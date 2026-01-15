@@ -1,17 +1,32 @@
 package org.commerce;
 
-//TIP 코드를 <b>실행</b>하려면 <shortcut actionId="Run"/>을(를) 누르거나
-// 에디터 여백에 있는 <icon src="AllIcons.Actions.Execute"/> 아이콘을 클릭하세요.
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP 캐럿을 강조 표시된 텍스트에 놓고 <shortcut actionId="ShowIntentionActions"/>을(를) 누르면
-        // IntelliJ IDEA이(가) 수정을 제안하는 것을 확인할 수 있습니다.
-        System.out.printf("Hello and welcome!");
+        List<Product> productList = new ArrayList<>();
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP <shortcut actionId="Debug"/>을(를) 눌러 코드 디버그를 시작하세요. 1개의 <icon src="AllIcons.Debugger.Db_set_breakpoint"/> 중단점을 설정해 드렸습니다
-            // 언제든 <shortcut actionId="ToggleLineBreakpoint"/>을(를) 눌러 중단점을 더 추가할 수 있습니다.
-            System.out.println("i = " + i);
+        //1. 제품을 하나하나 객체로 만들어서 전체 리스트 객체로 집어넣는다.
+        Product product1 = new Product("1","Galaxy S25" , 1200000 , "최신 안드로이드 스마트폰" ,100);
+        Product product2 = new Product("2","iPhone 16" , 1350000 , "Apple의 최신 스마트폰" ,50);
+        Product product3 = new Product("3","MacBook Pro" , 2400000 , "M3 칩셋이 탑재된 노트북" ,100);
+        Product product4 = new Product("4","AirPods Pro" , 350000 , "노이즈 캔슬링 무선 이어폰" ,100);
+        productList.add(product1);
+        productList.add(product2);
+        productList.add(product3);
+        productList.add(product4);
+
+        System.out.println("[ 실시간 커머스 플랫폼 - 전자제품 ]");
+        productList.forEach(product -> System.out.println(product.getId() + "." + product.getName() + " | " + product.getPrice() + " | " + product.getDescription() + " | " + product.getQuantity()));
+
+        System.out.println("0. 종료    | 프로그램 종료");
+        Scanner sc = new Scanner(System.in);
+        int menu = sc.nextInt();
+
+        if (menu == 0) {
+            System.out.println("프로그램을 종료합니다.");
         }
     }
 }

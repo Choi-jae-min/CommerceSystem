@@ -6,8 +6,8 @@ import org.commerce.repository.ProductRepositoryImpl;
 import java.util.List;
 
 public class Category {
-    private CategoryType categoryType;
-    List<Product> productList;
+    private final CategoryType categoryType;
+    private final List<Product> productList;
 
     Category(CategoryType categoryType) {
         this.categoryType = categoryType;

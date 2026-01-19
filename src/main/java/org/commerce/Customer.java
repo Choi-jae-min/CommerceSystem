@@ -1,10 +1,10 @@
 package org.commerce;
 
 public class Customer {
-    String name;
-    String email;
-    String grade;
-    int totalPaymentPrice;
+    private String name;
+    private String email;
+    private String grade;
+    private int totalPaymentPrice;
 
     Customer(String name, String email, String grade, int totalPaymentPrice) {
         this.name = name;

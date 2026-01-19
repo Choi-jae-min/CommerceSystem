@@ -62,7 +62,7 @@ public class CommerceSystem {
         if("0".equals(selectProductID)){
             return;
         }
-        Optional<Product> selectProduct = category.productList
+        Optional<Product> selectProduct = category.getProduct()
                 .stream()
                 .filter(product -> selectProductID.equals(product.getId()))
                 .findFirst();

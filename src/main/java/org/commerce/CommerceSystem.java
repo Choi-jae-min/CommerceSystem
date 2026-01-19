@@ -6,9 +6,19 @@ import java.util.Scanner;
 public class CommerceSystem {
     private Category category;
     private final Scanner sc;
+    Customer customer;
 
     CommerceSystem() {
+        System.out.println("어서오세요 성함과 이메일을 입력해주세요.");
         sc = new Scanner(System.in);
+        System.out.print("고객님의 성함 : ");
+        String customerName = sc.nextLine();
+        System.out.print("고객님의 이메일 : ");
+        String customerEmail = sc.nextLine();
+        customer = new Customer(customerName , customerEmail);
+
+        System.out.println("환영합니다" + customerName + "님!");
+        System.out.println("즐거운 시간보내세요! ^^7");
     }
     public void start(){
         // 메뉴 출력을 하나의 메서드로 분리.
@@ -20,6 +30,7 @@ public class CommerceSystem {
         char menu;
         for (;;){
             System.out.println("[ 실시간 커머스 플랫폼 ]");
+            System.out.println("원하시는 제품 카테고리를 선택 해 주세요.");
             System.out.println("1. 전체 상품");
             System.out.println("2. 전자 제품");
             System.out.println("3. 주방 용품");
@@ -44,7 +55,7 @@ public class CommerceSystem {
         }
     }
 
-    // 상품 구매 프로세수
+    // 상품 선택 프로세수
     public void selectProduct(){
         System.out.println("==================================");
         System.out.printf("[ %s 카테고리 ] 원하시는 상품 ID를 입력하세요." , category.getCategoryType().getCategoryType());

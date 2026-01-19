@@ -5,5 +5,6 @@ import org.commerce.Product;
 import java.util.List;
 
 public interface ProductRepositoryImpl {
-    public List<Product> getProducts();
+    List<Product> getALLProducts();
+    List<Product> getBeverage();
 }

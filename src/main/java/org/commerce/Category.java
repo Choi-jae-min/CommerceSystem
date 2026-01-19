@@ -20,30 +20,21 @@ public class Category {
             default -> this.productList = productRepository.getALLProducts();
         }
     }
-
-    public CategoryType getName() {
+    public CategoryType getCategoryType() {
         return categoryType;
     }
+
     public List<Product> getProduct() {
         return productList;
-    }
-
-    public void setName(CategoryType categoryType) {
-        this.categoryType = categoryType;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-
-        sb.append("카테고리 : ")
-                .append(categoryType.getCategoryType())
-                .append("\n");
-
         for (Product product : productList) {
             sb.append("상품 ID = ").append(product.getId())
                     .append(" | 상품 이름 = ").append(product.getName())
-                    .append(" | 상품 가격 = ").append(product.getPrice())
+                    .append(" | 상품 가격 = ").append(String.format("%,d", product.getPrice()))
                     .append(" | 잔여 갯수 = ").append(product.getQuantity())
                     .append("\n");
         }

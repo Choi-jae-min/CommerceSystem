@@ -12,10 +12,12 @@ public class Category {
     Category(CategoryType categoryType) {
         this.categoryType = categoryType;
         ProductRepositoryImpl productRepository = new ProductRepository();
-        if(categoryType == CategoryType.BEVERAGE){
-            this.productList = productRepository.getBeverage();
-        }else {
-            this.productList = productRepository.getALLProducts();
+        switch (categoryType) {
+            case FOOD -> this.productList = productRepository.getFood();
+            case BEVERAGE -> this.productList = productRepository.getBeverage();
+            case ELECTRONIC -> this.productList = productRepository.getElectronic();
+            case KITCHEN -> this.productList = productRepository.getKitchen();
+            default -> this.productList = productRepository.getALLProducts();
         }
     }
 
@@ -32,6 +34,21 @@ public class Category {
 
     @Override
     public String toString() {
-        return "Category [name=" + categoryType + ", product=" + productList + "]";
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("카테고리 : ")
+                .append(categoryType.getCategoryType())
+                .append("\n");
+
+        for (Product product : productList) {
+            sb.append("상품 ID = ").append(product.getId())
+                    .append(" | 상품 이름 = ").append(product.getName())
+                    .append(" | 상품 가격 = ").append(product.getPrice())
+                    .append(" | 잔여 갯수 = ").append(product.getQuantity())
+                    .append("\n");
+        }
+
+        return sb.toString();
     }
+
 }

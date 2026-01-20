@@ -20,9 +20,8 @@ public class CommerceSystem {
         System.out.println("환영합니다" + customerName + "님!");
         System.out.println("즐거운 시간보내세요! ^^7");
     }
+
     public void start(){
-        // 메뉴 출력을 하나의 메서드로 분리.
-        // -> 해당 start가 정확히 처음에 무엇을 하는지 명확하지 않다고 생각이 들어서 분리하였습니다.
         showMenu();
     }
 
@@ -46,7 +45,8 @@ public class CommerceSystem {
                 case '5' -> category = new Category(CategoryType.BEVERAGE);
             }
             // 제품 선택 메서드
-            selectProduct();
+            Product selectedProduct = selectProduct();
+            Buy(selectedProduct);
 
             if (menu == '0') {
                 System.out.println("프로그램을 종료합니다.");
@@ -56,7 +56,7 @@ public class CommerceSystem {
     }
 
     // 상품 선택 프로세수
-    public void selectProduct(){
+    public Product selectProduct(){
         System.out.println("==================================");
         System.out.printf("[ %s 카테고리 ] 원하시는 상품 ID를 입력하세요." , category.getCategoryType().getCategoryType());
         System.out.println();
@@ -71,7 +71,7 @@ public class CommerceSystem {
         String selectProductID = sc.nextLine();
         // "0" 입력시 메서드 종료
         if("0".equals(selectProductID)){
-            return;
+            return null;
         }
         Optional<Product> selectProduct = category.getProduct()
                 .stream()
@@ -81,8 +81,30 @@ public class CommerceSystem {
         // id가 같은 값이 없으면 "상품을 잘못 선택 하셨습니다 출력
         if(selectProduct.isEmpty()){
             System.out.println("상품을 잘못 선택 하셨습니다.");
-        }else{
-            System.out.println("선택하신 상품 = " + selectProduct.get());
+            return null;
         }
+        System.out.println("선택하신 상품 = " + selectProduct.get());
+        return selectProduct.get();
+    }
+
+    public void Buy(Product product){
+        System.out.println("선택하신 제품을 구매 하시겠습니까? 1. 구매  | 2. 취소");
+        int buy = sc.nextInt();
+        if(buy==2) return;
+
+        int customerMoney = customer.getMoney();
+
+        if(product.getPrice() > customerMoney){
+            System.out.println("금액이 부족합니다.");
+            System.out.println("현재 소지금액 = " + customerMoney);
+            return;
+        }
+        product.setQuantity(product.getQuantity() - 1);
+        customer.payment(product.getPrice());
+        customer.setGrade();
+
+        System.out.println("상품구매에 성공 하였습니다.");
+        String customerInfo = customer.toString();
+        System.out.println("구매 후 고객님의 정보" + customerInfo );
     }
 }

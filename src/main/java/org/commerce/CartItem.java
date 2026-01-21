@@ -23,14 +23,21 @@ public class CartItem {
         return productQuantity;
     }
 
+    public int getProductPrice() {
+        return productPrice;
+    }
+
     public void manageProductQuantity(int productQuantity) {
+        if(this.productQuantity + productQuantity < 0) {
+            this.productQuantity = 0;
+        }
         this.productQuantity += productQuantity;
     }
 
     @Override
     public String toString() {
         return """
-                상품명 = %s | 가격 = %,d | 수량 = %d
-                """.formatted(productName, productPrice, productQuantity);
+                id =%s | 상품명 = %s | 가격 = %,d | 수량 = %d
+                """.formatted(productId ,productName, productPrice, productQuantity);
     }
 }

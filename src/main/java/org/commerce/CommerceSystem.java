@@ -30,23 +30,22 @@ public class CommerceSystem {
     private void showMenu() {
         char menu;
         for (;;){
-            // 시작시 초기 메뉴를 장바구니 혹은 상품을 볼 수 있도록 변경.
             System.out.println("[ 실시간 커머스 플랫폼 ]");
             System.out.println("원하시는 제품 카테고리를 선택 해 주세요.");
             System.out.println("1. 상품보기");
             System.out.println("2. 장바구니");
             System.out.println("0. 종료    | 프로그램 종료");
             menu = sc.next().charAt(0);
-            switch (menu){
-                // 상품 보기를 하나의 프로세스로 묶어서 메서드 화.
-                case '1' -> shoppingProcess();
-                // 장바구니 컨트롤러 호출.
-                case '2' -> cartController();
+            try {
+                switch (menu){
+                    case '1' -> shoppingProcess();
+                    case '2' -> cartController();
+                    default -> System.out.println("잘못된 메뉴를 선택 하셨습니다.");
+                }
+            }catch (RuntimeException e) {
+                System.out.println(e.getMessage());
             }
-//            Product selectedProduct = selectProduct();
-//            Buy(selectedProduct);
-
-            if (menu == '0') {
+            if(menu == '0'){
                 System.out.println("프로그램을 종료합니다.");
                 break;
             }
@@ -85,10 +84,33 @@ public class CommerceSystem {
         }
     }
 
-    // 기존에 상품선택에서 결제 까지 진행했던 사항을 장바구니에 추가하는 로직으로 변경
     private void shoppingProcess() {
-        showProductCategory();
+        System.out.println("상품 카테고리를 선택 해 주세요.");
+        System.out.println("1. 전체 상품 | 2. 전자 제품 | 3. 주방 용품 | 4. 음식 | 5. 음료 | 0. 뒤로가기");
+        char menu = sc.next().charAt(0);
+        switch (menu){
+            // DB 에서 가져 와서 카테고리에 담는다.
+            case '1' -> category = new Category(CategoryType.ALL);
+            case '2' -> category = new Category(CategoryType.ELECTRONIC);
+            case '3' -> category = new Category(CategoryType.KITCHEN);
+            case '4' -> category = new Category(CategoryType.FOOD);
+            case '5' -> category = new Category(CategoryType.BEVERAGE);
+            case '0' -> {
+                category = null;
+                return;
+            }
+            default -> throw new RuntimeException("잘못된 메뉴 입력 발생...");
+        }
+
         try {
+            System.out.println("======================================================================================================");
+            System.out.printf("[ %s 카테고리 ] 원하시는 상품 ID를 입력하세요." , category.getCategoryType().getCategoryType());
+            System.out.println();
+
+            System.out.print(category.toString());
+            System.out.println("0 -> 뒤로가기");
+            System.out.println("======================================================================================================");
+
             Optional<Product> selectedProduct = selectProduct();
             selectedProduct.ifPresent(product -> {
                 System.out.println("선택하신 상품을 장바구니에 넣을까요? 0: 뒤로가기 | 그외 숫자 : 장바구니에 넣을 숫자.");
@@ -107,36 +129,8 @@ public class CommerceSystem {
         }
     }
 
-
-    private void showProductCategory() {
-        System.out.println("상품 카테고리를 선택 해 주세요.");
-        System.out.println("1. 전체 상품");
-        System.out.println("2. 전자 제품");
-        System.out.println("3. 주방 용품");
-        System.out.println("4. 음식");
-        System.out.println("5. 음료");
-        char menu = sc.next().charAt(0);
-        switch (menu){
-            case '1' -> category = new Category(CategoryType.ALL);
-            case '2' -> category = new Category(CategoryType.ELECTRONIC);
-            case '3' -> category = new Category(CategoryType.KITCHEN);
-            case '4' -> category = new Category(CategoryType.FOOD);
-            case '5' -> category = new Category(CategoryType.BEVERAGE);
-        }
-    }
-
     // 옵셔널로 변경. 상품이 있을 수도 없을 수도 있기때문에.
     private Optional<Product> selectProduct(){
-        System.out.println("==================================");
-        System.out.printf("[ %s 카테고리 ] 원하시는 상품 ID를 입력하세요." , category.getCategoryType().getCategoryType());
-        System.out.println();
-
-        String productString = category.toString();
-        //상품 리스트 출력
-        System.out.print(productString);
-        System.out.println("0 -> 뒤로가기");
-        System.out.println("==================================");
-
         sc.nextLine();
         String selectProductID = sc.nextLine();
         // "0" 입력시 메서드 종료
@@ -173,7 +167,7 @@ public class CommerceSystem {
                     System.out.println("죄송합니다 남은 수량이 부족합니다.");
                     cart.removeItem(cartItem.getProductId());
                 }else{
-                    productListForBuy.add(new Product(p.getId() , p.getName() , p.getPrice(), p.getDescription(), cartItem.getProductQuantity()));
+                    productListForBuy.add(new Product(p.getId() , p.getName() , p.getPrice(), p.getDescription(), cartItem.getProductQuantity(), p.getCategory()));
                 }
             }, () -> {
                 System.out.println("해당 제품이 존재 하지 않습니다.");

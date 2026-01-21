@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepositoryImpl {
-   List<Product> getALLProducts();
+    List<Product> getALLProducts();
 
     List<Product> getByCategory(CategoryType categoryType);
 
     Optional<Product> findById(String id);
+
+    Boolean updateQuantityByProductId(String id , Integer quantity);
 }

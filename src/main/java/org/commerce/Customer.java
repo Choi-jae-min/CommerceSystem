@@ -14,12 +14,36 @@ public class Customer {
         this.grade = GradeType.BRONZE;
         this.totalPaymentPrice = 0;
         this.money = 1_000_000_000;
-        //고객 생성과 동시에 카트 생성.
-        // db가 없으므로 기존에 cart 유지 X
         this.cart = new Cart();
     }
 
-    public void setGrade() {
+//    public int getTotalPaymentPrice() {
+//        return totalPaymentPrice;
+//    }
+
+//    private void setTotalPaymentPrice(int totalPaymentPrice) {
+//        this.totalPaymentPrice = totalPaymentPrice;
+//    }
+
+    public int getMoney() {
+        return money;
+    }
+
+//    private void setMoney(int money) {
+//        this.money = money;
+//    }
+
+
+    /// 고객이 돈을 지불합니다.
+    public void payment(int productPrice) {
+        this.totalPaymentPrice += productPrice;
+        setGrade();
+        // 추후 할인률 적용.
+        this.money -= productPrice;
+    }
+
+    /// 고객의 총 결제 금액에 따라 (원가) 등급을 설정.
+    private void setGrade() {
         if(this.totalPaymentPrice < 500_000){
             this.grade = GradeType.BRONZE;
         }
@@ -32,27 +56,6 @@ public class Customer {
         else {
             this.grade = GradeType.PLATINUM;
         }
-    }
-
-    public int getTotalPaymentPrice() {
-        return totalPaymentPrice;
-    }
-
-    public void setTotalPaymentPrice(int totalPaymentPrice) {
-        this.totalPaymentPrice = totalPaymentPrice;
-    }
-
-    public int getMoney() {
-        return money;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
-    }
-
-    public void payment(int productPrice) {
-        this.totalPaymentPrice += productPrice;
-        this.money -= productPrice;
     }
 
 

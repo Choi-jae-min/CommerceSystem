@@ -30,7 +30,7 @@ public class Cart {
         System.out.println("장바구니 추가 완료!");
     }
 
-    /// 카트에 담긴 물건의 수량을 조절합니다.
+    /// 카트에 담긴 물건의 수량을 조절 합니다.
     public void manageItemQuantity(String productId, int itemCount) {
         Optional<CartItem> isCartItem = findCartItemByProductId(productId);
         isCartItem.ifPresentOrElse(i -> {
@@ -53,6 +53,11 @@ public class Cart {
             return;
         }
         this.totalPrice += totalPrice;
+    }
+
+    public void cleanCart() {
+        items.clear();
+        totalPrice = 0;
     }
 
     public List<CartItem> getItems() {

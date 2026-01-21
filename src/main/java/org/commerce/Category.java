@@ -12,10 +12,11 @@ public class Category {
     // 그니까 이 데이터를 백날 수정해봤자. 실제 DB에는 영양이 가지 않기때문에,
     // 지금같은 repo를 사용하는 구조에서는 해당객체를 수정할게 아니라 Repo를 수정하는 방법을 찾아야 한다.
     private final List<Product> productList;
+    public ProductRepositoryImpl productRepository;
 
     Category(CategoryType categoryType) {
         this.categoryType = categoryType;
-        ProductRepositoryImpl productRepository = new ProductRepository();
+        this.productRepository = new ProductRepository();
 
         if(CategoryType.ALL == categoryType){
             this.productList = productRepository.getALLProducts();

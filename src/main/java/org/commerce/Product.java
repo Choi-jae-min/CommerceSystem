@@ -6,13 +6,15 @@ public class Product {
     private int price;
     private String description;
     private int quantity;
+    private String category;
 
-    public Product(String id, String name, int price, String description, int quantity) {
+    public Product(String id, String name, int price, String description, int quantity , String category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.quantity = quantity;
+        this.category = category;
     }
     public String getId() {
         return id;
@@ -34,6 +36,9 @@ public class Product {
     }
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+    public String getCategory() {
+        return category;
     }
     public void checkIsValidQuantity(int quantity) {
         if(this.quantity < quantity) {

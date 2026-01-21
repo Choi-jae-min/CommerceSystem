@@ -1,16 +1,15 @@
 package org.commerce.repository;
 
+import org.commerce.CategoryType;
 import org.commerce.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepositoryImpl {
-    List<Product> getALLProducts();
-    List<Product> getBeverage();
+   List<Product> getALLProducts();
 
-    List<Product> getFood();
+    List<Product> getByCategory(CategoryType categoryType);
 
-    List<Product> getElectronic();
-
-    List<Product> getKitchen();
+    Optional<Product> findById(String id);
 }

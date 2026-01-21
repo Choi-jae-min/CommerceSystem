@@ -6,6 +6,7 @@ public class Customer {
     private GradeType grade;
     private int totalPaymentPrice;
     private int money;
+    public Cart cart;
 
     public Customer(String name, String email) {
         this.name = name;
@@ -13,6 +14,9 @@ public class Customer {
         this.grade = GradeType.BRONZE;
         this.totalPaymentPrice = 0;
         this.money = 1_000_000_000;
+        //고객 생성과 동시에 카트 생성.
+        // db가 없으므로 기존에 cart 유지 X
+        this.cart = new Cart();
     }
 
     public void setGrade() {

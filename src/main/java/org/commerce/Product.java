@@ -33,6 +33,11 @@ public class Product {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+    public void checkIsValidQuantity(int quantity) {
+        if(this.quantity < quantity) {
+            throw new IllegalArgumentException("현재 재고 수량보다 많은 수가 입력 되었습니다.");
+        }
+    }
 
     @Override
     public String toString() {

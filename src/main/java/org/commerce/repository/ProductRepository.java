@@ -40,4 +40,11 @@ public class ProductRepository implements ProductRepositoryImpl {
         MockProductData.updateQuantityByProductId(id, quantity);
         return true;
     }
+
+    @Override
+    public Boolean checkValidName(String productName) {
+        Optional<Product> isProduct = MockProductData.all().stream().filter(product -> product.getName().equals(productName)).findFirst();
+        return isProduct.isEmpty();
+    }
 }
+

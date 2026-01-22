@@ -92,15 +92,18 @@ public class CommerceSystem {
 
         System.out.println("등록할 상품의 이름을 입력 해주세요.");
         String productName = sc.nextLine();
-
+        boolean isValidName = category.productRepository.checkValidName(productName);
+        if(!isValidName){
+            System.out.println("이미 등록된 상품입니다.");
+            return;
+        }
         System.out.println("가격을 설정해 주세요.");
         int productPrice = sc.nextInt();
-
+        sc.nextLine();
         if(productPrice <= 0){
             System.out.println("가격은 0이하가 될 수 없습니다.");
             return;
         }
-
         System.out.println("상품의 설명을 작성해주세요.");
         String productDescription = sc.nextLine();
 

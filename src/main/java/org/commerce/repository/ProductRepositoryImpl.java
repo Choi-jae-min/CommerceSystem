@@ -16,4 +16,6 @@ public interface ProductRepositoryImpl {
     void addProduct(Product product);
 
     Boolean updateQuantityByProductId(String id , Integer quantity);
+
+    Boolean checkValidName(String productName);
 }

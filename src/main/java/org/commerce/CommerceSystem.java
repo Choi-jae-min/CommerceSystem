@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class CommerceSystem {
-    private Category category;
+    private Category category ;
     private final Scanner sc;
     Customer customer;
     Purchase purchase;
@@ -19,7 +19,7 @@ public class CommerceSystem {
         System.out.print("고객님의 이메일 : ");
         String customerEmail = sc.nextLine();
         customer = new Customer(customerName , customerEmail);
-
+        category = new Category(CategoryType.ALL);
         System.out.println("환영합니다" + customerName + "님!");
         System.out.println("즐거운 시간보내세요! ^^7");
     }
@@ -84,7 +84,6 @@ public class CommerceSystem {
     }
 
     private void removeProduct(){
-        category = new Category(CategoryType.ALL);
         System.out.println("=================================상품 삭제===============================");
         System.out.println(category);
         System.out.println("삭제할 상품명을 입력 해주세요.");
@@ -105,7 +104,6 @@ public class CommerceSystem {
     }
 
     private void updateProduct() {
-        category = new Category(CategoryType.ALL);
         System.out.println("=================================상품 수정===============================");
         System.out.println(category);
         System.out.println("수정할 상품명을 입력 해주세요.");
@@ -138,7 +136,6 @@ public class CommerceSystem {
     }
 
     private void addProduct(){
-        category = new Category(CategoryType.ALL);
         System.out.println("등록할 상품의 ID 입력 해주세요.");
         String productId = sc.nextLine();
 
@@ -271,18 +268,33 @@ public class CommerceSystem {
         }
     }
 
+    private void priceFilterProces() {
+        System.out.println("1. 입력 금액 이하 상품 보기 | 2. 압력 금액 이상 상품만 보기" );
+        int priceFilterOption = sc.nextInt();
+
+        System.out.println("원하는 금액을 입력하세요.");
+        int priceFilter = sc.nextInt();
+        switch (priceFilterOption) {
+            case 1 -> category.getProductsUnderPrice(priceFilter);
+            case 2 -> category.getProductsOverPrice(priceFilter);
+            default -> System.out.println("잘못된 메뉴입니다.");
+        }
+    }
+
     ///  상품을 조회하고 카트에 담는 쇼핑 프로세스 흐름제어.
     private void shoppingProcess() {
         System.out.println("상품 카테고리를 선택 해 주세요.");
-        System.out.println("1. 전체 상품 | 2. 전자 제품 | 3. 주방 용품 | 4. 음식 | 5. 음료 | 0. 뒤로가기");
+        System.out.println("1. 전체 상품 | 2. 전자 제품 | 3. 주방 용품 | 4. 음식 | 5. 음료 ");
+        System.out.println("6. 금액으로 찾기 | 0. 뒤로가기");
         char menu = sc.next().charAt(0);
         switch (menu){
             // DB 에서 가져 와서 카테고리에 담는다.
-            case '1' -> category = new Category(CategoryType.ALL );
-            case '2' -> category = new Category(CategoryType.ELECTRONIC);
-            case '3' -> category = new Category(CategoryType.KITCHEN);
-            case '4' -> category = new Category(CategoryType.FOOD);
-            case '5' -> category = new Category(CategoryType.BEVERAGE);
+            case '1' -> category.findByCategory(CategoryType.ALL);
+            case '2' -> category.findByCategory(CategoryType.ELECTRONIC);
+            case '3' -> category.findByCategory(CategoryType.KITCHEN);
+            case '4' -> category.findByCategory(CategoryType.FOOD);
+            case '5' -> category.findByCategory(CategoryType.BEVERAGE);
+            case '6' -> priceFilterProces();
             case '0' -> {
                 category = null;
                 return;
@@ -393,7 +405,6 @@ public class CommerceSystem {
         // 고객이 돈을 지불함.
         customer.payment(totalPayment);
         customer.cart.cleanCart();
-        category = new Category(CategoryType.ALL);
         System.out.println("상품구매에 성공 하였습니다.");
         System.out.println("구매 후 고객님의 정보 = " + customer);
         System.out.println("============================구매 후 남은 재고 현황============================ " +

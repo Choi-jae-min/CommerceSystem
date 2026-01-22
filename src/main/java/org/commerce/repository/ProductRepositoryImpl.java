@@ -26,4 +26,8 @@ public interface ProductRepositoryImpl {
     Boolean checkValidName(String productName);
 
     String removeProductByName(String productName);
+
+    List<Product> getProductsUnderPrice(int maxPrice);
+
+    List<Product> getProductsOverPrice(int minPrice);
 }

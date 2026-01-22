@@ -3,8 +3,11 @@ package org.commerce.repository;
 import org.commerce.CategoryType;
 import org.commerce.Product;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 // 데이터를 여기서 불러와야 하기 때문에.
 // category에있는 객체를 백날 수정해봐야 의미가 없다.
@@ -92,6 +95,20 @@ public class ProductRepository implements ProductRepositoryImpl {
         MockProductData.all().remove(product);
         // 제거된 id 리턴.
         return product.getId();
+    }
+
+    @Override
+    public List<Product> getProductsUnderPrice(int maxPrice) {
+        return MockProductData.all().stream()
+                .filter(p -> p.getPrice() < maxPrice)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public List<Product> getProductsOverPrice(int minPrice) {
+        return MockProductData.all().stream()
+                .filter(p -> p.getPrice() > minPrice)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }
 

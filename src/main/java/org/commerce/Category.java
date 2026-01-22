@@ -12,18 +12,14 @@ public class Category {
     // 실제 데이터는  repo안에있다.
     // 그니까 이 데이터를 백날 수정해봤자. 실제 DB에는 영양이 가지 않기때문에,
     // 지금같은 repo를 사용하는 구조에서는 해당객체를 수정할게 아니라 Repo를 수정하는 방법을 찾아야 한다.
-    private final List<Product> productList;
+    private List<Product> productList;
     public ProductRepositoryImpl productRepository;
 
     Category(CategoryType categoryType) {
         this.categoryType = categoryType;
         this.productRepository = new ProductRepository();
 
-        if(CategoryType.ALL == categoryType){
             this.productList = productRepository.getALLProducts();
-        }else{
-            this.productList = productRepository.getByCategory(categoryType);
-        }
     }
     public CategoryType getCategoryType() {
         return categoryType;
@@ -31,6 +27,23 @@ public class Category {
 
     public List<Product> getProduct() {
         return productList;
+    }
+
+    public void getProductsUnderPrice(int maxPrice) {
+        this.productList = productRepository.getProductsUnderPrice(maxPrice);
+    }
+
+    public void getProductsOverPrice(int minPrice){
+        this.productList = productRepository.getProductsOverPrice(minPrice);
+    }
+
+
+    public void findByCategory(CategoryType categoryType) {
+        if(categoryType == CategoryType.ALL){
+            this.productList = productRepository.getALLProducts();
+        }else {
+            this.productList = productRepository.getByCategory(categoryType);
+        }
     }
 
     @Override

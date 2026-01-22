@@ -22,6 +22,15 @@ public class Admin {
         }
     }
 
+    public void logout() {
+        this.isLoin = false;
+        resetTryCount();
+    }
+
+    public boolean getIsLoin() {
+        return isLoin;
+    }
+
     ///  시도 횟수 증가
     private void increaseTryCount() {
         this.tryCount++;

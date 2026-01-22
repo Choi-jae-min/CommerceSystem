@@ -4,6 +4,7 @@ import org.commerce.repository.ProductRepository;
 import org.commerce.repository.ProductRepositoryImpl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Category {
     private final CategoryType categoryType;
@@ -34,16 +35,13 @@ public class Category {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (Product product : productList) {
-            sb.append("상품 ID = ").append(product.getId())
-                    .append(" | 상품 이름 = ").append(product.getName())
-                    .append(" | 상품 가격 = ").append(String.format("%,d", product.getPrice()))
-                    .append(" | 잔여 갯수 = ").append(product.getQuantity())
-                    .append("\n");
-        }
-
-        return sb.toString();
+        return productList.stream()
+                .map(product ->
+                        "상품 ID = " + product.getId()
+                                + " | 상품 이름 = " + product.getName()
+                                + " | 상품 가격 = " + String.format("%,d", product.getPrice())
+                                + " | 잔여 갯수 = " + product.getQuantity()
+                )
+                .collect(Collectors.joining("\n"));
     }
-
 }

@@ -37,6 +37,14 @@ public class Product {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getCategory() {
         return category;
     }

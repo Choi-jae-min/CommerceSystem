@@ -37,7 +37,11 @@ public class ProductRepository implements ProductRepositoryImpl {
     /// id와 같은 상품을 찾고, 입력받은 quantity로 업데이트 친다.
     @Override
     public Boolean updateQuantityByProductId(String id, Integer quantity) {
-        MockProductData.updateQuantityByProductId(id, quantity);
+        Optional<Product> isProduct = MockProductData.all().stream()
+                .filter(p -> p.getId().equals(id)).findFirst();
+
+        isProduct.ifPresentOrElse(p -> p.setQuantity(quantity) , () -> {throw new RuntimeException(
+                "해당 id의 제품이 존재 하지 않습니다. id: " + id);});
         return true;
     }
 
@@ -45,6 +49,34 @@ public class ProductRepository implements ProductRepositoryImpl {
     public Boolean checkValidName(String productName) {
         Optional<Product> isProduct = MockProductData.all().stream().filter(product -> product.getName().equals(productName)).findFirst();
         return isProduct.isEmpty();
+    }
+
+    @Override
+    public void updateQuantityByProductName(String name, Integer quantity) {
+        Optional<Product> isProduct = MockProductData.all().stream()
+                .filter(p -> p.getName().equals(name)).findFirst();
+
+        isProduct.ifPresentOrElse(p -> p.setQuantity(quantity) , () -> {throw new RuntimeException(
+                "해당 이름의 제품이 존재 하지 않습니다. name: " + name);});
+    }
+
+    @Override
+    public void updatePriceByProductName(String name, Integer newPrice) {
+        Optional<Product> isProduct = MockProductData.all().stream()
+                .filter(p -> p.getName().equals(name)).findFirst();
+
+        isProduct.ifPresentOrElse(p -> p.setPrice(newPrice) , () -> {throw new RuntimeException(
+                "해당 이름의 제품이 존재 하지 않습니다. name: " + name);});
+
+    }
+
+    @Override
+    public void updateDescriptionByProductName(String name, String description) {
+        Optional<Product> isProduct = MockProductData.all().stream()
+                .filter(p -> p.getName().equals(name)).findFirst();
+
+        isProduct.ifPresentOrElse(p -> p.setDescription(description) , () -> {throw new RuntimeException(
+                "해당 이름의 제품이 존재 하지 않습니다. name: " + name);});
     }
 }
 

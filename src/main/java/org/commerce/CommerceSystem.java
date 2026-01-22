@@ -72,16 +72,47 @@ public class CommerceSystem {
         }
         System.out.println("[ 관리자 화면 ]");
         System.out.println("원하는 기능을 선택하세요.");
-        System.out.println("1. 상품 추가 | 0. 관리자 모드 종료 ( 로그아웃 )");
+        System.out.println("1. 상품 추가 | 2. 상품 수정 | 0. 관리자 모드 종료 ( 로그아웃 )");
         char adminMenu = sc.nextLine().charAt(0);
         switch (adminMenu){
             case '1' -> addProduct();
-            case '2' -> {
-                //
-                 }
+            case '2' -> updateProduct();
             default -> {
                 isAdmin.logout();
             }
+        }
+    }
+
+    private void updateProduct() {
+        category = new Category(CategoryType.ALL);
+        System.out.println("=================================상품 수정===============================");
+        System.out.println(category);
+        System.out.println("수정할 상품명을 입력 해주세요.");
+        String productName = sc.nextLine();
+        boolean isValidName = category.productRepository.checkValidName(productName);
+        if(!isValidName){
+            System.out.println("수정할 항목을 선택하세요 1. 가격 | 2. 설명 | 3. 수량");
+            int updateMenu = sc.nextInt();
+            switch (updateMenu){
+                case 1 -> {
+                    System.out.println("수정할 가격을 입력하세요.");
+                    int newPrice = sc.nextInt();
+                    category.productRepository.updatePriceByProductName(productName, newPrice);
+                }
+                case 2 -> {
+                    System.out.println("새로운 설명을 입력 해주세요.");
+                    String newDescription = sc.nextLine();
+                    category.productRepository.updateDescriptionByProductName(productName, newDescription);
+                }
+                case 3 -> {
+                    System.out.println("새로운 수량 입력 해주세요.");
+                    int newCount = sc.nextInt();
+                    category.productRepository.updateQuantityByProductName(productName, newCount);
+                }
+                default -> System.out.println("잘못된 메뉴입니디.");
+            }
+        }else {
+            System.out.println("일치하는 상품이 없습니다.");
         }
     }
 

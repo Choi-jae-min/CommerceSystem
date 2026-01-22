@@ -42,12 +42,4 @@ public class MockProductData {
     public static void addProduct(Product product) {
         PRODUCTS.add(product);
     }
-
-    public static void updateQuantityByProductId(String id, Integer quantity){
-        Optional<Product> isProduct = PRODUCTS.stream()
-                .filter(p -> p.getId().equals(id)).findFirst();
-
-        isProduct.ifPresentOrElse(p -> p.setQuantity(quantity) , () -> {throw new RuntimeException(
-                "해당 id의 제품이 존재 하지 않습니다. id: " + id);});
-    }
 }

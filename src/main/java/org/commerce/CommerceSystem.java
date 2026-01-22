@@ -1,5 +1,13 @@
 package org.commerce;
 
+import org.commerce.auth.Admin;
+import org.commerce.customer.Cart;
+import org.commerce.customer.Customer;
+import org.commerce.payment.Purchase;
+import org.commerce.product.Category;
+import org.commerce.product.CategoryType;
+import org.commerce.product.Product;
+
 import java.util.Optional;
 import java.util.Scanner;
 

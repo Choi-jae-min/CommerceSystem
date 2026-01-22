@@ -1,4 +1,4 @@
-package org.commerce;
+package org.commerce.customer;
 
 public enum GradeType {
     BRONZE("브론즈"),

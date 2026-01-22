@@ -1,4 +1,4 @@
-package org.commerce;
+package org.commerce.product;
 
 public class Product {
     private final String id;

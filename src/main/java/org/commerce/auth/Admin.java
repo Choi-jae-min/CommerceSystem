@@ -1,4 +1,4 @@
-package org.commerce;
+package org.commerce.auth;
 
 public class Admin {
     private int tryCount;

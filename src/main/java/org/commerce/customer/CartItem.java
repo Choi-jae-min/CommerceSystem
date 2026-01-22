@@ -1,4 +1,4 @@
-package org.commerce;
+package org.commerce.customer;
 
 public class CartItem {
     private final String productId;

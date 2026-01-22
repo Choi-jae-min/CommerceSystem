@@ -1,4 +1,4 @@
-package org.commerce;
+package org.commerce.customer;
 
 import java.util.*;
 import java.util.stream.Collectors;

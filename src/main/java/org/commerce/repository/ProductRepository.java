@@ -1,10 +1,9 @@
 package org.commerce.repository;
 
-import org.commerce.CategoryType;
-import org.commerce.Product;
+import org.commerce.product.CategoryType;
+import org.commerce.product.Product;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

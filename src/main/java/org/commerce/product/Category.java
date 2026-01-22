@@ -1,4 +1,4 @@
-package org.commerce;
+package org.commerce.product;
 
 import org.commerce.repository.ProductRepository;
 import org.commerce.repository.ProductRepositoryImpl;
@@ -15,7 +15,7 @@ public class Category {
     private List<Product> productList;
     public ProductRepositoryImpl productRepository;
 
-    Category(CategoryType categoryType) {
+    public Category(CategoryType categoryType) {
         this.categoryType = categoryType;
         this.productRepository = new ProductRepository();
 

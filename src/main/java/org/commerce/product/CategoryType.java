@@ -1,4 +1,4 @@
-package org.commerce;
+package org.commerce.product;
 
 public enum CategoryType {
     ELECTRONIC("전자 제품"),

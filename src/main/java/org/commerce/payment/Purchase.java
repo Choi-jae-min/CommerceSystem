@@ -1,4 +1,4 @@
-package org.commerce;
+package org.commerce.payment;
 
 
 import java.util.HashMap;

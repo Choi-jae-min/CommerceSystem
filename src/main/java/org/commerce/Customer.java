@@ -17,21 +17,10 @@ public class Customer {
         this.cart = new Cart();
     }
 
-//    public int getTotalPaymentPrice() {
-//        return totalPaymentPrice;
-//    }
-
-//    private void setTotalPaymentPrice(int totalPaymentPrice) {
-//        this.totalPaymentPrice = totalPaymentPrice;
-//    }
-
     public int getMoney() {
         return money;
     }
 
-//    private void setMoney(int money) {
-//        this.money = money;
-//    }
 
     public String getName() {
         return this.name;
@@ -41,8 +30,20 @@ public class Customer {
     public void payment(int productPrice) {
         this.totalPaymentPrice += productPrice;
         setGrade();
-        // 추후 할인률 적용.
-        this.money -= productPrice;
+        //이번 결제 금액까지 더해 할인률 적용.
+        double discountRate = switch (grade) {
+            case BRONZE -> 0.0;
+            case SLIVER -> 0.05;
+            case GOLD -> 0.10;
+            case PLATINUM -> 0.15;
+        };
+        //혹시 할인 금액 소수점이 나오면 올림 처리
+        int discountAmount = (int) Math.ceil(productPrice * discountRate);
+        System.out.println("총 할인 금액 = " + discountAmount);
+        int finalPrice = productPrice - discountAmount;
+
+        System.out.println("결제 금액 = " + finalPrice);
+        this.money -= finalPrice;
     }
 
     /// 고객의 총 결제 금액에 따라 (원가) 등급을 설정.
@@ -60,7 +61,6 @@ public class Customer {
             this.grade = GradeType.PLATINUM;
         }
     }
-
 
     @Override
     public String toString() {

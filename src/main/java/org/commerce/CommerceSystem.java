@@ -55,7 +55,7 @@ public class CommerceSystem {
                     default -> System.out.println("잘못된 메뉴를 선택 하셨습니다.");
                 }
             }catch (RuntimeException e) {
-                System.out.println(e.getMessage());
+                System.out.println('e' + e.getMessage());
             }
             if(menu == '0'){
                 System.out.println("프로그램을 종료합니다.");
@@ -347,7 +347,6 @@ public class CommerceSystem {
     /// DB데이터를 반영합니다.
     public void purchaseAllProductFromCart() {
         Cart cart = customer.cart;
-
         // DB에 실제 제품이 있는지 확인하고.
         cart.getItems().forEach(cartItem -> {
             Optional<Product> isProduct = category.productRepository.findById(cartItem.getProductId());
@@ -378,10 +377,9 @@ public class CommerceSystem {
                     System.out.println(e.getMessage());
                 }
             });
-
-            // 모든 장바구니 상품을 검사 완료 하였다면 구매를 시작.
-            buy();
         });
+        // 모든 장바구니 상품을 검사 완료 하였다면 구매를 시작.
+        buy();
     }
 
     ///  구매 매서드.

@@ -32,9 +32,9 @@ public class Customer {
         setGrade();
         //이번 결제 금액까지 더해 할인률 적용.
         double discountRate = switch (grade) {
-            case BRONZE -> 0.0;
+            case BRONZE -> 0;
             case SLIVER -> 0.05;
-            case GOLD -> 0.10;
+            case GOLD -> 0.1;
             case PLATINUM -> 0.15;
         };
         //혹시 할인 금액 소수점이 나오면 올림 처리

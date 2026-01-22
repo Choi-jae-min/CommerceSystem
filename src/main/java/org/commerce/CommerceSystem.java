@@ -50,7 +50,6 @@ public class CommerceSystem {
                         if(isAdmin.getIsLoin()){
                             // 관리자 메뉴 활성화.
                             showAdminMenu();
-
                         }
                     }
                     default -> System.out.println("잘못된 메뉴를 선택 하셨습니다.");
@@ -66,19 +65,41 @@ public class CommerceSystem {
     }
 
     private void showAdminMenu() {
-        if(!isAdmin.getIsLoin()){
-            System.out.println("[ 관리자만 접근 할 수 있습니다. ]");
-            return;
+        for (;;){
+            if(!isAdmin.getIsLoin()){
+                System.out.println("[ 관리자만 접근 할 수 있습니다. ]");
+                break;
+            }
+            System.out.println("[ 관리자 화면 ]");
+            System.out.println("원하는 기능을 선택하세요.");
+            System.out.println("1. 상품 추가 | 2. 상품 수정 | 3. 상품 삭제 | 0. 관리자 모드 종료 ( 로그아웃 )");
+            char adminMenu = sc.nextLine().charAt(0);
+            switch (adminMenu){
+                case '1' -> addProduct();
+                case '2' -> updateProduct();
+                case '3' -> removeProduct();
+                default -> isAdmin.logout();
+            }
         }
-        System.out.println("[ 관리자 화면 ]");
-        System.out.println("원하는 기능을 선택하세요.");
-        System.out.println("1. 상품 추가 | 2. 상품 수정 | 0. 관리자 모드 종료 ( 로그아웃 )");
-        char adminMenu = sc.nextLine().charAt(0);
-        switch (adminMenu){
-            case '1' -> addProduct();
-            case '2' -> updateProduct();
-            default -> {
-                isAdmin.logout();
+    }
+
+    private void removeProduct(){
+        category = new Category(CategoryType.ALL);
+        System.out.println("=================================상품 삭제===============================");
+        System.out.println(category);
+        System.out.println("삭제할 상품명을 입력 해주세요.");
+        String productName = sc.nextLine();
+        boolean isValidName = category.productRepository.checkValidName(productName);
+        if(isValidName){
+            System.out.println("이미 존재하지 않는 상품입니다.");
+        }else {
+            System.out.println("정말 삭제 하시겠습니까? D 입력시 삭제. | 그외 취소");
+            System.out.println("장바구니 안에 있는 제품도 함께 사라집니다.");
+            String isRemove = sc.nextLine();
+            if(isRemove.equals("d") || isRemove.equals("D")){
+                String removedProductId = category.productRepository.removeProductByName(productName);
+                customer.cart.removeItem(removedProductId);
+                System.out.println("상품 제거 완료 : " + removedProductId);
             }
         }
     }

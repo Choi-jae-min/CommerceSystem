@@ -8,6 +8,7 @@ public class CommerceSystem {
     private final Scanner sc;
     Customer customer;
     Purchase purchase;
+    Admin isAdmin;
 
 
     CommerceSystem() {
@@ -46,6 +47,11 @@ public class CommerceSystem {
                     case '2' -> cartController();
                     case '3' -> {
                         loginToAdmin();
+                        if(isAdmin.getIsLoin()){
+                            // 관리자 메뉴 활성화.
+                            showAdminMenu();
+
+                        }
                     }
                     default -> System.out.println("잘못된 메뉴를 선택 하셨습니다.");
                 }
@@ -59,8 +65,109 @@ public class CommerceSystem {
         }
     }
 
+    private void showAdminMenu() {
+        if(!isAdmin.getIsLoin()){
+            System.out.println("[ 관리자만 접근 할 수 있습니다. ]");
+            return;
+        }
+        System.out.println("[ 관리자 화면 ]");
+        System.out.println("원하는 기능을 선택하세요.");
+        System.out.println("1. 상품 추가 | 0. 관리자 모드 종료 ( 로그아웃 )");
+        char adminMenu = sc.nextLine().charAt(0);
+        switch (adminMenu){
+            case '1' -> addProduct();
+            case '2' -> {
+                //
+                 }
+            default -> {
+                isAdmin.logout();
+            }
+        }
+    }
+
+    private void addProduct(){
+        category = new Category(CategoryType.ALL);
+        System.out.println("등록할 상품의 ID 입력 해주세요.");
+        String productId = sc.nextLine();
+
+        System.out.println("등록할 상품의 이름을 입력 해주세요.");
+        String productName = sc.nextLine();
+
+        System.out.println("가격을 설정해 주세요.");
+        int productPrice = sc.nextInt();
+
+        if(productPrice <= 0){
+            System.out.println("가격은 0이하가 될 수 없습니다.");
+            return;
+        }
+
+        System.out.println("상품의 설명을 작성해주세요.");
+        String productDescription = sc.nextLine();
+
+        System.out.println("수량을 입력 해주세요.");
+        int productCount= sc.nextInt();
+        if(productCount <= 0){
+            System.out.println("수량은 0이하가 될 수 없습니다.");
+            return;
+        }
+
+        System.out.println("어떤 카테고리에 입력할까요?");
+        System.out.println("1. 전자 제품 | 2. 주방 용품 | 3. 음식 | 4. 음료");
+        int productCategory = sc.nextInt();
+        switch(productCategory){
+            case 1:
+                category.productRepository.addProduct(
+                        new Product(
+                                productId,
+                                productName,
+                                productPrice,
+                                productDescription,
+                                productCount,
+                                CategoryType.ELECTRONIC.getCategoryType()
+                        ));
+                break;
+            case 2:
+                category.productRepository.addProduct(
+                        new Product(
+                                productId,
+                                productName,
+                                productPrice,
+                                productDescription,
+                                productCount,
+                                CategoryType.KITCHEN.getCategoryType()
+                        ));
+                break;
+            case 3:
+                category.productRepository.addProduct(
+                        new Product(
+                                productId,
+                                productName,
+                                productPrice,
+                                productDescription,
+                                productCount,
+                                CategoryType.FOOD.getCategoryType()
+                        ));
+                break;
+            case 4:
+                category.productRepository.addProduct(
+                        new Product(
+                                productId,
+                                productName,
+                                productPrice,
+                                productDescription,
+                                productCount,
+                                CategoryType.BEVERAGE.getCategoryType()
+                        ));
+                break;
+            default:
+                System.out.println("존재 하지 않는 카테고리 입니다.");
+                break;
+        }
+    }
+
+    ///  관리자 로그인 흐름
     private void loginToAdmin() {
-        Admin isAdmin = new Admin();
+        isAdmin = new Admin();
         boolean isLogin = false;
         while (!isLogin){
             try {

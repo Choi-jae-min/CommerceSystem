@@ -13,5 +13,7 @@ public interface ProductRepositoryImpl {
 
     Optional<Product> findById(String id);
 
+    void addProduct(Product product);
+
     Boolean updateQuantityByProductId(String id , Integer quantity);
 }

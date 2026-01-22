@@ -29,15 +29,15 @@ public class ProductRepository implements ProductRepositoryImpl {
                 .findFirst();
     }
 
+    @Override
+    public void addProduct(Product product) {
+        MockProductData.addProduct(product);
+    };
 
     /// id와 같은 상품을 찾고, 입력받은 quantity로 업데이트 친다.
     @Override
     public Boolean updateQuantityByProductId(String id, Integer quantity) {
-        Optional<Product> isProduct = MockProductData.all().stream()
-                .filter(p -> p.getId().equals(id)).findFirst();
-
-        isProduct.ifPresentOrElse(p -> p.setQuantity(quantity) , () -> {throw new RuntimeException(
-                "해당 id의 제품이 존재 하지 않습니다. id: " + id);});
+        MockProductData.updateQuantityByProductId(id, quantity);
         return true;
     }
 }

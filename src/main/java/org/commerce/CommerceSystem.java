@@ -36,12 +36,17 @@ public class CommerceSystem {
             System.out.println("원하시는 제품 카테고리를 선택 해 주세요.");
             System.out.println("1. 상품보기");
             System.out.println("2. 장바구니");
+            System.out.println("3. 관리자모드");
             System.out.println("0. 종료    | 프로그램 종료");
             menu = sc.next().charAt(0);
+            sc.nextLine();
             try {
                 switch (menu){
                     case '1' -> shoppingProcess();
                     case '2' -> cartController();
+                    case '3' -> {
+                        loginToAdmin();
+                    }
                     default -> System.out.println("잘못된 메뉴를 선택 하셨습니다.");
                 }
             }catch (RuntimeException e) {
@@ -52,6 +57,24 @@ public class CommerceSystem {
                 break;
             }
         }
+    }
+
+    private void loginToAdmin() {
+        Admin isAdmin = new Admin();
+        boolean isLogin = false;
+        while (!isLogin){
+            try {
+                System.out.println("비밀번호를 입력 해 주세요.");
+                String inputPassword = sc.nextLine();
+                isLogin = isAdmin.login(customer.getName() , inputPassword);
+            }catch (IllegalAccessException e) {
+                System.out.println(e.getMessage());
+            }catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+                break;
+            }
+        }
+        System.out.println("환영합니다 관리자님!.");
     }
 
     /// 장바구니 서비스 컨트롤 입출력 흐름제어

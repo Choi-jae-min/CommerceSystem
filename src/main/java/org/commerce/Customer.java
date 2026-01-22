@@ -33,6 +33,9 @@ public class Customer {
 //        this.money = money;
 //    }
 
+    public String getName() {
+        return this.name;
+    }
 
     /// 고객이 돈을 지불합니다.
     public void payment(int productPrice) {

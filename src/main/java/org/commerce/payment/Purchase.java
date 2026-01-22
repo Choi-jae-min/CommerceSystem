@@ -9,7 +9,7 @@ public class Purchase {
     private final HashMap<String, Integer> productInfo = new HashMap<>();
     private int totalPrice = 0;
 
-    Purchase() {
+    public Purchase() {
         // 랜덤한 ID 생성.
         this.id = UUID.randomUUID().toString();
     }

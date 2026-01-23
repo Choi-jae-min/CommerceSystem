@@ -17,6 +17,8 @@ public interface ProductRepositoryImpl {
 
     Boolean updateQuantityByProductId(String id , Integer quantity);
 
+    void incrementQuantityByProductId(String id , Integer quantity);
+
     void updateQuantityByProductName(String name , Integer quantity);
 
     void updatePriceByProductName(String name , Integer newPrice);

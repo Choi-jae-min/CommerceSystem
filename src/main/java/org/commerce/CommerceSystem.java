@@ -8,6 +8,8 @@ import org.commerce.product.Category;
 import org.commerce.product.CategoryType;
 import org.commerce.product.Product;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -15,7 +17,7 @@ public class CommerceSystem {
     private Category category ;
     private final Scanner sc;
     Customer customer;
-    Purchase purchase;
+    ArrayList<Purchase> purchase;
     Admin isAdmin;
 
 
@@ -28,6 +30,7 @@ public class CommerceSystem {
         String customerEmail = sc.nextLine();
         customer = new Customer(customerName , customerEmail);
         category = new Category(CategoryType.ALL);
+        purchase = new ArrayList<>();
         System.out.println("환영합니다" + customerName + "님!");
         System.out.println("즐거운 시간보내세요! ^^7");
     }
@@ -367,33 +370,24 @@ public class CommerceSystem {
     /// DB데이터를 반영합니다.
     public void purchaseAllProductFromCart() {
         Cart cart = customer.cart;
-        // DB에 실제 제품이 있는지 확인하고.
         cart.getItems().forEach(cartItem -> {
             Optional<Product> isProduct = category.productRepository.findById(cartItem.getProductId());
 
             isProduct.ifPresent(product -> {
-                // 남아있는 재고가 장바구니에 있는 재고보다 많으면 구매.
-                // 근데 여기서 반복적으로 사면, 하나하나하나 제품을 구매하는건데
-                // 돈을 우선 빼고, 수량 조절하는게 맞는가.
-                // 아니면 수량을 먼저 제어하고 돈을 뺴야하는가.
-                // 일단 수량을 하나하나 제어하고 마지막에 토탈 금액을 빼는게 맞는거같다.
-
-                // 그러나 만약 결제가 실패한다면, 재고를 원상복구 시키는 프로세스가 필요할것임.
                 try {
                     if(product.getQuantity() > cartItem.getProductQuantity()){
                         Boolean isSuccessManageProductDb = category.productRepository.updateQuantityByProductId(product.getId(),product.getQuantity() - cartItem.getProductQuantity());
                         if(isSuccessManageProductDb){
-                            // db업데이트를 성공했다면, 여기서 상품id 와,금액을 추가.
-                            // 구매를 담당하는 객체를 생성.
-                            // 구매하고자 하는 데이터를 저장. 이 데이터는 나중에 혹시 결제가 실패했을때(돈 부족, 도중 이탈 등.) DB 복구하기 위해서 필요하다고 판단.
-                            purchase = new Purchase();
-                            purchase.addProductId(cartItem.getProductId(),  cartItem.getProductPrice() , cartItem.getProductQuantity());
+                            // 지금 고객은 하나이니까 당장은 getLast 로 제어..
+                            purchase.add(new Purchase());
+                            purchase.getLast().addProductId(cartItem.getProductId(),cartItem.getProductQuantity(),cartItem.getProductPrice());
                         }
                     }else {
                         // 없으면 cart 에서 제거
                         cart.removeItem(cartItem.getProductId());
                     }
                 }catch (RuntimeException e) {
+                    System.out.println("에러 발생");
                     System.out.println(e.getMessage());
                 }
             });
@@ -404,20 +398,26 @@ public class CommerceSystem {
 
     ///  구매 매서드.
     public void buy(){
-        int customerMoney = customer.getMoney();
-        int totalPayment = purchase.getTotalPrice();
-
-        if(customerMoney < totalPayment){
-            throw new RuntimeException("고객님이 소유하신 금액이 부족합니다.");
+        int totalPayment = purchase.getLast().getTotalPrice();
+        try{
+            customer.payment(totalPayment);
+            customer.cart.cleanCart();
+            System.out.println("상품구매에 성공 하였습니다.");
+            System.out.println("구매 후 고객님의 정보 = " + customer);
+            System.out.println("============================구매 후 남은 재고 현황============================ " +
+                    "\n" + category);
+            purchase.getLast().completePurchase();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            // 재고 원상 복구
+            restoreProductDb();
         }
-        // 고객이 돈을 지불함.
-        customer.payment(totalPayment);
-        customer.cart.cleanCart();
-        System.out.println("상품구매에 성공 하였습니다.");
-        System.out.println("구매 후 고객님의 정보 = " + customer);
-        System.out.println("============================구매 후 남은 재고 현황============================ " +
-                "\n" + category);
     }
 
-    public void restoreProductDb() {}
+    public void restoreProductDb() {
+        HashMap<String, Integer> productInfo = purchase.getLast().productInfo();
+        if(!productInfo.isEmpty()){
+            productInfo.forEach( (key, value) -> category.productRepository.incrementQuantityByProductId(key,value));
+        }
+    }
 }

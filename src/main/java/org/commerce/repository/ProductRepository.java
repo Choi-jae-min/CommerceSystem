@@ -109,5 +109,14 @@ public class ProductRepository implements ProductRepositoryImpl {
                 .filter(p -> p.getPrice() > minPrice)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
+
+    @Override
+    public void incrementQuantityByProductId(String id, Integer quantity) {
+        Optional<Product> isProduct = MockProductData.all().stream()
+                .filter(p -> p.getId().equals(id)).findFirst();
+
+        isProduct.ifPresentOrElse(p -> p.incrementQuantity(quantity) , () -> {throw new RuntimeException(
+                "해당 id의 제품이 존재 하지 않습니다. id: " + id);});
+    }
 }
 

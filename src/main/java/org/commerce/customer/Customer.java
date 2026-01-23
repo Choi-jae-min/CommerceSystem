@@ -13,7 +13,7 @@ public class Customer {
         this.email = email;
         this.grade = GradeType.BRONZE;
         this.totalPaymentPrice = 0;
-        this.money = 1_000_000_000;
+        this.money = 10;
         this.cart = new Cart();
     }
 
@@ -27,11 +27,11 @@ public class Customer {
     }
 
     /// 고객이 돈을 지불합니다.
-    public void payment(int productPrice) {
-        this.totalPaymentPrice += productPrice;
-        setGrade();
+    public void payment(int productPrice) throws Exception {
+        int tmepTotalPaymentPrice = this.totalPaymentPrice + productPrice;
+        GradeType tempGrade = checkGrade(tmepTotalPaymentPrice);
         //이번 결제 금액까지 더해 할인률 적용.
-        double discountRate = switch (grade) {
+        double discountRate = switch (tempGrade) {
             case BRONZE -> 0;
             case SLIVER -> 0.05;
             case GOLD -> 0.1;
@@ -43,7 +43,27 @@ public class Customer {
         int finalPrice = productPrice - discountAmount;
 
         System.out.println("결제 금액 = " + finalPrice);
+        if(this.money < finalPrice) {
+            throw new Exception("결제 실패 : 고객님이 소유하신 금액이 부족합니다.");
+        }
         this.money -= finalPrice;
+        //결제 완료 하면 실제 토탈 금액과 등급 변경
+        this.totalPaymentPrice += finalPrice;
+        setGrade();
+    }
+    private GradeType checkGrade(int tmepTotalPaymentPrice) {
+        if(tmepTotalPaymentPrice < 500_000){
+            return GradeType.BRONZE;
+        }
+        else if(tmepTotalPaymentPrice < 1_000_000){
+            return GradeType.SLIVER;
+        }
+        else if(tmepTotalPaymentPrice <= 2_000_000){
+            return GradeType.GOLD;
+        }
+        else {
+            return GradeType.PLATINUM;
+        }
     }
 
     /// 고객의 총 결제 금액에 따라 (원가) 등급을 설정.

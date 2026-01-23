@@ -8,6 +8,7 @@ public class Purchase {
     private final String id;
     private final HashMap<String, Integer> productInfo = new HashMap<>();
     private int totalPrice = 0;
+    private PurchaseStatusType status = PurchaseStatusType.PENDING;
 
     public Purchase() {
         // 랜덤한 ID 생성.
@@ -25,11 +26,15 @@ public class Purchase {
         this.totalPrice += totalPrice;
     }
 
-    public HashMap<String, Integer> getProductId() {
+    public HashMap<String, Integer> productInfo() {
         return productInfo;
     }
 
     public int getTotalPrice() {
         return totalPrice;
+    }
+
+    public void completePurchase (){
+        this.status = PurchaseStatusType.COMPLETED;
     }
 }

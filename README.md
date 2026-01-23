@@ -28,3 +28,20 @@
 
 ## FlowChart
 
+### 전체 플로우
+![전체 플로우](https://github.com/user-attachments/assets/229982d6-efab-4562-a2ae-785a621015e2)
+
+### 관리자 로그인 시스템
+![1  관리자 로그인 시스템](https://github.com/user-attachments/assets/617a6e4d-1400-4cdd-8ce4-fbcfaf027c31)
+
+### 관리자 모드 전체
+![관리자 모드 전체](https://github.com/user-attachments/assets/902b6a9b-355c-43fc-b5f4-3662485688fe)
+
+### 쇼핑 시스템 
+![쇼핑 시스템](https://github.com/user-attachments/assets/5bb37514-c4bc-4de2-9321-52198d44eb65)
+
+### 장바구니 시스템
+![장바구니](https://github.com/user-attachments/assets/29c8bc43-ec2c-4fb2-94bd-ab878171ae7d)
+
+### 결제 시스템
+![상품구매](https://github.com/user-attachments/assets/1ae592c2-907f-4090-ad68-1a493d3a23a0)

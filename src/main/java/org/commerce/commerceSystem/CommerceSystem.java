@@ -1,4 +1,4 @@
-package org.commerce;
+package org.commerce.commerceSystem;
 
 import org.commerce.auth.Admin;
 import org.commerce.customer.Cart;
@@ -21,7 +21,7 @@ public class CommerceSystem {
     Admin isAdmin;
 
 
-    CommerceSystem() {
+    public CommerceSystem() {
         System.out.println("어서오세요 성함과 이메일을 입력해주세요.");
         sc = new Scanner(System.in);
         System.out.print("고객님의 성함 : ");
@@ -98,20 +98,26 @@ public class CommerceSystem {
         System.out.println("=================================상품 삭제===============================");
         System.out.println(category);
         System.out.println("삭제할 상품명을 입력 해주세요.");
+
         String productName = sc.nextLine();
-        boolean isValidName = category.productRepository.checkValidName(productName);
+        boolean isValidName = category.productRepository.checkDuplicatedName(productName);
         if(isValidName){
-            System.out.println("이미 존재하지 않는 상품입니다.");
-        }else {
-            System.out.println("정말 삭제 하시겠습니까? D 입력시 삭제. | 그외 취소");
-            System.out.println("장바구니 안에 있는 제품도 함께 사라집니다.");
-            String isRemove = sc.nextLine();
-            if(isRemove.equals("d") || isRemove.equals("D")){
-                String removedProductId = category.productRepository.removeProductByName(productName);
-                customer.cart.removeItem(removedProductId);
-                System.out.println("상품 제거 완료 : " + removedProductId);
-            }
+            throw new RuntimeException("이미 존재하지 않는 상품입니다.");
         }
+
+        System.out.println("정말 삭제 하시겠습니까? D 입력시 삭제. | 그외 취소");
+        System.out.println("장바구니 안에 있는 제품도 함께 사라집니다.");
+        String isRemoveCommand = sc.nextLine();
+
+        if(isDeleteCommand(isRemoveCommand)){
+            String removedProductId = category.productRepository.removeProductByName(productName);
+            customer.cart.removeItem(removedProductId);
+            System.out.println("상품 제거 완료 : " + removedProductId);
+        }
+    }
+
+    private boolean isDeleteCommand(String command){
+        return command.equals("d") || command.equals("D");
     }
 
     private void updateProduct() {
@@ -119,30 +125,31 @@ public class CommerceSystem {
         System.out.println(category);
         System.out.println("수정할 상품명을 입력 해주세요.");
         String productName = sc.nextLine();
-        boolean isValidName = category.productRepository.checkValidName(productName);
-        if(!isValidName){
-            System.out.println("수정할 항목을 선택하세요 1. 가격 | 2. 설명 | 3. 수량");
-            int updateMenu = sc.nextInt();
-            switch (updateMenu){
-                case 1 -> {
-                    System.out.println("수정할 가격을 입력하세요.");
-                    int newPrice = sc.nextInt();
-                    category.productRepository.updatePriceByProductName(productName, newPrice);
-                }
-                case 2 -> {
-                    System.out.println("새로운 설명을 입력 해주세요.");
-                    String newDescription = sc.nextLine();
-                    category.productRepository.updateDescriptionByProductName(productName, newDescription);
-                }
-                case 3 -> {
-                    System.out.println("새로운 수량 입력 해주세요.");
-                    int newCount = sc.nextInt();
-                    category.productRepository.updateQuantityByProductName(productName, newCount);
-                }
-                default -> System.out.println("잘못된 메뉴입니디.");
+
+        boolean isDuplicatedName = category.productRepository.checkDuplicatedName(productName);
+        if(isDuplicatedName){
+            throw new RuntimeException("일치하는 상품이 없습니다.");
+        }
+
+        System.out.println("수정할 항목을 선택하세요 1. 가격 | 2. 설명 | 3. 수량");
+        int updateMenu = sc.nextInt();
+        switch (updateMenu){
+            case 1 -> {
+                System.out.println("수정할 가격을 입력하세요.");
+                int newPrice = sc.nextInt();
+                category.productRepository.updatePriceByProductName(productName, newPrice);
             }
-        }else {
-            System.out.println("일치하는 상품이 없습니다.");
+            case 2 -> {
+                System.out.println("새로운 설명을 입력 해주세요.");
+                String newDescription = sc.nextLine();
+                category.productRepository.updateDescriptionByProductName(productName, newDescription);
+            }
+            case 3 -> {
+                System.out.println("새로운 수량 입력 해주세요.");
+                int newCount = sc.nextInt();
+                category.productRepository.updateQuantityByProductName(productName, newCount);
+            }
+            default -> System.out.println("잘못된 메뉴입니디.");
         }
     }
 
@@ -152,7 +159,7 @@ public class CommerceSystem {
 
         System.out.println("등록할 상품의 이름을 입력 해주세요.");
         String productName = sc.nextLine();
-        boolean isValidName = category.productRepository.checkValidName(productName);
+        boolean isValidName = category.productRepository.checkDuplicatedName(productName);
         if(!isValidName){
             System.out.println("이미 등록된 상품입니다.");
             return;
@@ -374,8 +381,9 @@ public class CommerceSystem {
             Optional<Product> isProduct = category.productRepository.findById(cartItem.getProductId());
 
             isProduct.ifPresent(product -> {
+                System.out.println("product = " + product);
                 try {
-                    if(product.getQuantity() > cartItem.getProductQuantity()){
+                    if(product.getQuantity() >= cartItem.getProductQuantity()){
                         Boolean isSuccessManageProductDb = category.productRepository.updateQuantityByProductId(product.getId(),product.getQuantity() - cartItem.getProductQuantity());
                         if(isSuccessManageProductDb){
                             // 지금 고객은 하나이니까 당장은 getLast 로 제어..

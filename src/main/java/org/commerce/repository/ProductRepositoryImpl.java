@@ -25,7 +25,7 @@ public interface ProductRepositoryImpl {
 
     void updateDescriptionByProductName(String name , String description);
 
-    Boolean checkValidName(String productName);
+    Boolean checkDuplicatedName(String productName);
 
     String removeProductByName(String productName);
 

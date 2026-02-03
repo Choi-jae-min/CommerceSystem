@@ -48,7 +48,7 @@ public class ProductRepository implements ProductRepositoryImpl {
     }
 
     @Override
-    public Boolean checkValidName(String productName) {
+    public Boolean checkDuplicatedName(String productName) {
         Optional<Product> isProduct = MockProductData.all().stream().filter(product -> product.getName().equals(productName)).findFirst();
         return isProduct.isEmpty();
     }

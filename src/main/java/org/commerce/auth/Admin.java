@@ -4,22 +4,20 @@ public class Admin {
     private int tryCount;
     private boolean isLoin = false;
 
-    private String username = "Admin";
-    private String password = "password123";
-
     public Admin() {
         resetTryCount();
     }
 
     public Boolean login(String username, String password) throws IllegalAccessException {
-        if(this.username.equals(username) && this.password.equals(password)) {
+        String username1 = "Admin";
+        String password1 = "password123";
+        if(username1.equals(username) && password1.equals(password)) {
             resetTryCount();
             this.isLoin = true;
             return true;
-        }else{
-            increaseTryCount();
-            throw new IllegalAccessException("로그인 실패.");
         }
+        increaseTryCount();
+        throw new IllegalAccessException("로그인 실패.");
     }
 
     public void logout() {
@@ -27,7 +25,7 @@ public class Admin {
         resetTryCount();
     }
 
-    public boolean getIsLoin() {
+    public boolean checkIsLoin() {
         return isLoin;
     }
 

@@ -37,47 +37,43 @@ public class CommerceSystem {
 
     ///  커머스 시스템 시작 메서드.
     public void start(){
-        showMenu();
+        mainCommerceProcess();
     }
 
+    private void showMainCommerceProcessMenu(){
+        System.out.println("[ 실시간 커머스 플랫폼 ]");
+        System.out.println("원하시는 제품 카테고리를 선택 해 주세요.");
+        System.out.println("1. 상품보기");
+        System.out.println("2. 장바구니");
+        System.out.println("3. 관리자모드");
+        System.out.println("0. 종료    | 프로그램 종료");
+    }
     ///  실시간 커머스 플랫폼 기본 메뉴 출력 메서드.
-    private void showMenu() {
-        char menu;
-        for (;;){
-            System.out.println("[ 실시간 커머스 플랫폼 ]");
-            System.out.println("원하시는 제품 카테고리를 선택 해 주세요.");
-            System.out.println("1. 상품보기");
-            System.out.println("2. 장바구니");
-            System.out.println("3. 관리자모드");
-            System.out.println("0. 종료    | 프로그램 종료");
-            menu = sc.next().charAt(0);
+    private void mainCommerceProcess() {
+        char inputMenu ='9';
+        while (inputMenu != '0'){
+            showMainCommerceProcessMenu();
+            inputMenu = sc.next().charAt(0);
             sc.nextLine();
-            try {
-                switch (menu){
-                    case '1' -> shoppingProcess();
-                    case '2' -> cartController();
-                    case '3' -> {
-                        loginToAdmin();
-                        if(isAdmin.getIsLoin()){
-                            // 관리자 메뉴 활성화.
-                            showAdminMenu();
-                        }
+            switch (inputMenu){
+                case '1' -> shoppingProcess();
+                case '2' -> cartController();
+                case '3' -> {
+                    loginToAdmin();
+                    if(isAdmin.checkIsLoin()){
+                        System.out.println("환영합니다 관리자님!.");
+                        showAdminMenu();
                     }
-                    default -> System.out.println("잘못된 메뉴를 선택 하셨습니다.");
                 }
-            }catch (RuntimeException e) {
-                System.out.println('e' + e.getMessage());
-            }
-            if(menu == '0'){
-                System.out.println("프로그램을 종료합니다.");
-                break;
+                case '0' -> System.out.println("프로그램을 종료합니다.");
+                default -> System.out.println("잘못된 메뉴를 선택 하셨습니다.");
             }
         }
     }
 
     private void showAdminMenu() {
         for (;;){
-            if(!isAdmin.getIsLoin()){
+            if(!isAdmin.checkIsLoin()){
                 System.out.println("[ 관리자만 접근 할 수 있습니다. ]");
                 break;
             }
@@ -251,7 +247,6 @@ public class CommerceSystem {
                 break;
             }
         }
-        System.out.println("환영합니다 관리자님!.");
     }
 
     /// 장바구니 서비스 컨트롤 입출력 흐름제어
